@@ -1,10 +1,17 @@
 import tkinter as tk
 import random
-import glob
+import os
 
 # Function to get a list of image paths from a directory
 def get_image_paths(directory):
-    image_paths = glob.glob(directory + "/*.png")  # Change the extension if your images have a different format
+    if directory[-1] != '/':
+        directory += '/'
+    files = os.listdir(directory)
+    image_paths = []
+    for file in files:
+        if '.png' in file:
+            image_paths.append(directory + file)
+    # shuffle the list into a random order
     random.shuffle(image_paths)
     return image_paths
 
@@ -18,9 +25,10 @@ def load_image():
 # Function to check the user's answer
 def check_answer():
     user_answer = entry.get().strip()
-    current_image_name = image_paths[image_index].split("/")[-1].split(".")[0]
+    current_image_name = image_paths[image_index].split("/")[-1]
+    corresponding_name = corresponding_names[current_image_name]
 
-    if user_answer.lower() == current_image_name.lower():
+    if user_answer.lower() == corresponding_name.lower():
         label_feedback.config(text="Correct!")
         # Move to the next image
         next_image()
@@ -36,19 +44,25 @@ def next_image():
     image_index = (image_index + 1) % len(image_paths)
     load_image()
 
+# manually choose names corresponding to images
+corresponding_names = {
+    'solsleutel_lage_fa.png': 'fa',
+    'solsleutel_lage_mi.png': 'mi',
+}
+
 # Create the main window
 window = tk.Tk()
-window.title("Image Guessing Game")
+window.title("Note reading practice")
 
 # Get a list of image paths from a directory
-image_paths = get_image_paths("../img")  # Replace with the actual directory path
+image_paths = get_image_paths("./img")
 
 # Variable to keep track of the current image index
 image_index = 0
 
 # Create and display the image label
 label_image = tk.Label(window)
-label_image.pack()
+label_image.pack() # This geometry manager organizes widgets in blocks before placing them in the parent widget.
 
 # Create and display the feedback label
 label_feedback = tk.Label(window, text="")
