@@ -48,18 +48,20 @@ def next_image():
 def handle_enter(event):
     check_answer()
 
-# manually choose names corresponding to images
-corresponding_names = {
-    'solsleutel_lage_fa.png': 'fa',
-    'solsleutel_lage_mi.png': 'mi',
-}
+images_dir = "./img"
+
+# generate dictionary with note corresponding to each image
+# we do this by taking the final part of our filename, which contains the note name.
+corresponding_names = {}
+for file in os.listdir(images_dir):
+    corresponding_names[file] = file.split('.')[0].split('_')[-1]
 
 # Create the main window
 window = tk.Tk()
 window.title("Note reading practice")
 
 # Get a list of image paths from a directory
-image_paths = get_image_paths("./img")
+image_paths = get_image_paths(images_dir)
 
 # Variable to keep track of the current image index
 image_index = 0
