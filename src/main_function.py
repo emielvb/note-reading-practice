@@ -44,6 +44,10 @@ def next_image():
     image_index = (image_index + 1) % len(image_paths)
     load_image()
 
+# Function to handle the 'Enter' key press event
+def handle_enter(event):
+    check_answer()
+
 # manually choose names corresponding to images
 corresponding_names = {
     'solsleutel_lage_fa.png': 'fa',
@@ -71,6 +75,9 @@ label_feedback.pack()
 # Create and display the text entry field
 entry = tk.Entry(window)
 entry.pack()
+
+# Bind the 'Enter' key press event to the handle_enter() function
+entry.bind("<Return>", handle_enter)
 
 # Create and display the submit button
 button_submit = tk.Button(window, text="Submit", command=check_answer)
